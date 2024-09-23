@@ -1,13 +1,13 @@
-# Use the Python 3.12-slim base image
+# Use the official slim version of Python 3.12 as the base image, keeping the image lightweight
 FROM python:3.12-slim
 
-# Set the working directory to /app
+# Set the working directory inside the container to /app
 WORKDIR /app
 
-# Install required system dependencies for other packages
+# Install necessary system dependencies required for building certain Python packages
 RUN apt-get update && apt-get install -y \
-    swig \
-    build-essential \
+    swig \                  
+    build-essential \        
     cmake \
     libopenblas-dev \
     libomp-dev \
@@ -15,20 +15,20 @@ RUN apt-get update && apt-get install -y \
     git \
     && apt-get clean
 
-# Copy requirements.txt into the container
+# Copy the Python dependencies file into the container
 COPY requirements.txt .
 
-# Replace faiss-cpu source install with the pre-built version
+# Modify requirements.txt to use the pre-built faiss-cpu package for better compatibility and faster setup
 RUN sed -i 's/faiss-cpu==1.7.4/faiss-cpu/g' requirements.txt
 
-# Install the required dependencies globally
+# Install the required Python dependencies without caching the packages to keep the image small
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code into the container
+# Copy the rest of the application source code into the working directory in the container
 COPY . .
 
-# Expose port 5000
+# Expose port 5000 to allow external access to the service running inside the container
 EXPOSE 5000
 
-# Set the default command to run the application
+# Set the default command to run the application using Python
 CMD ["python", "app.py"]
