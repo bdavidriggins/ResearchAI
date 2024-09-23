@@ -10,7 +10,7 @@ class OllamaClient:
 
     def __init__(
         self,
-        api_url: str = 'http://host.docker.internal:11434/api/generate',
+        api_url: str = 'http://localhost:11434/api/generate',
         model: str = 'llama2-uncensored'
     ):
         """
