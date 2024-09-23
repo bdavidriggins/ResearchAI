@@ -93,4 +93,104 @@ Whenever you want to start working on this project in the future:
 
 ---
 
-This README will help guide you in using and managing the virtual environment for this project in the future.
+
+
+
+# Ollama Service Setup and Troubleshooting Guide
+
+## 1. Checking Ollama Service Status
+To check if the Ollama service is running, use the following command:
+```
+sudo systemctl status ollama.service
+```
+If the service is not running, follow the steps below to set it up.
+
+## 2. Creating a Systemd Service for Ollama
+
+1. Create a systemd service file for Ollama:
+   ```bash
+   sudo nano /etc/systemd/system/ollama.service
+   ```
+
+2. Add the following content (update the paths as needed):
+   ```ini
+   [Unit]
+   Description=Ollama Server
+   After=network.target
+
+   [Service]
+   ExecStart=/path/to/ollama/binary --port 11434
+   WorkingDirectory=/path/to/ollama/
+   Restart=always
+   User=your-username
+   Group=your-group
+   Environment=DISPLAY=:0
+   StandardOutput=journal
+   StandardError=journal
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+3. Reload systemd to recognize the new service:
+   ```bash
+   sudo systemctl daemon-reload
+   ```
+
+4. Enable the Ollama service to start on boot:
+   ```bash
+   sudo systemctl enable ollama.service
+   ```
+
+5. Start the service:
+   ```bash
+   sudo systemctl start ollama.service
+   ```
+
+6. Check the status:
+   ```bash
+   sudo systemctl status ollama.service
+   ```
+
+## 3. Testing the Ollama Model (Llama2-uncensored)
+
+To test if the API and the `llama2-uncensored` model are working correctly, use the following `curl` command:
+```bash
+curl -X POST http://localhost:11434/api/generate -H "Content-Type: application/json" -d '{"model": "llama2-uncensored", "prompt": "What is the capital of France?", "max_tokens": 100}'
+```
+
+You should receive a JSON response if everything is working.
+
+## 4. Checking Logs for Errors
+If the model doesn't work as expected, check the logs:
+```bash
+sudo journalctl -u ollama.service
+```
+
+## 5. Updating the Systemd Service File
+If you see warnings about `syslog` being obsolete, update the service file:
+1. Open the file for editing:
+   ```bash
+   sudo nano /etc/systemd/system/ollama.service
+   ```
+2. Replace:
+   ```ini
+   StandardOutput=syslog
+   StandardError=syslog
+   ```
+   with:
+   ```ini
+   StandardOutput=journal
+   StandardError=journal
+   ```
+3. Save, then reload and restart the service:
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl restart ollama.service
+   ```
+
+## Additional Notes
+- Make sure your Ollama server is listening on the correct port (default: 11434).
+- Check GPU compatibility if you are using GPU inference.
+
+## Date of Last Update: 2024-09-23
