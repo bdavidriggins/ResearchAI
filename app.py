@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from services.db_service import DatabaseManager  # Adjusted the import to match the module
+from services.chat_service import handle_chat  # Add this import
 
 app = Flask(__name__)
 
@@ -14,14 +15,14 @@ def chat():
     query = data.get('query')
     context = data.get('context', '')
 
-    # For now, generate a dummy response
-    response_text = f"Echo: {query}"
+    # Call the chat handling function to get the real response
+    response_text = handle_chat(session_id, query, context)
 
     # Simulate tokens used and processing time
     tokens_used = len(query.split())
     processing_time = 0.1  # In seconds
-    model_used = 'EchoModel'
-    temperature = 0.0
+    model_used = 'llama2-uncensored'
+    temperature = 0.7
 
     # Save the chat, log, and LLM response to the database
     with DatabaseManager() as db:
