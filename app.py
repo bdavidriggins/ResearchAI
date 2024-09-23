@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from db_service import DatabaseManager  # Adjusted the import to match the module
+from services.db_service import DatabaseManager  # Adjusted the import to match the module
 
 app = Flask(__name__)
 
