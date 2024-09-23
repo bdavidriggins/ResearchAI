@@ -1,3 +1,8 @@
+#Build and run commands
+# docker buildx build --tag research_ai_project .
+# docker run --network=host -p 5000:5000 research_ai_project
+
+
 # Use the official slim version of Python 3.12 as the base image, keeping the image lightweight
 FROM python:3.12-slim
 
