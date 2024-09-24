@@ -1,12 +1,17 @@
 import os
 import shutil
 
-# Paths (ensure these paths are correct and adjust if necessary)
-sources_dir = '../sources/'
-embeddings_dir = '../faiss/'
-processed_files_log = '../faiss/processed_files.json'
-faiss_index_path = '../faiss/faiss_index.bin'
-faiss_metadata_path = '../faiss/faiss_metadata.json'
+# Paths
+# Get the absolute path to the directory where the script is located
+script_dir = os.path.dirname(os.path.realpath(__file__))
+app_dir = os.path.dirname(script_dir)
+
+# Construct absolute paths based on the app's directory
+sources_dir = os.path.join(app_dir, 'sources/')
+embeddings_dir = os.path.join(app_dir, 'faiss/')
+processed_files_log = os.path.join(app_dir, 'faiss', 'processed_files.json')
+faiss_index_path = os.path.join(app_dir, 'faiss', 'faiss_index.bin')
+faiss_metadata_path = os.path.join(app_dir, 'faiss', 'faiss_metadata.json')
 
 def reset_faiss_database():
     """Resets FAISS index, embeddings, metadata, and processed files."""

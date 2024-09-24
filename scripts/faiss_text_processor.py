@@ -3,7 +3,7 @@ import json
 import numpy as np
 from sentence_transformers import SentenceTransformer
 import faiss
-
+import torch
 # Paths
 # Get the absolute path to the directory where the script is located
 script_dir = os.path.dirname(os.path.realpath(__file__))
@@ -83,7 +83,7 @@ def load_chunks(file_path):
     with open(file_path, 'r') as file:
         return [chunk.strip() for chunk in file.read().split('\n\n') if chunk.strip()]
 
-def generate_embeddings(chunks, batch_size=16, model_name='multi-qa-mpnet-base-dot-v1'):
+def generate_embeddings(chunks, batch_size=8, model_name='multi-qa-mpnet-base-dot-v1'):
     """Generate embeddings for the given text chunks with batching."""
     embedding_model = SentenceTransformer(model_name)
     embeddings = []
@@ -91,6 +91,10 @@ def generate_embeddings(chunks, batch_size=16, model_name='multi-qa-mpnet-base-d
         batch = chunks[i:i+batch_size]
         batch_embeddings = embedding_model.encode(batch, convert_to_numpy=True, show_progress_bar=True)
         embeddings.append(batch_embeddings)
+
+         # Clear GPU memory between batches
+        torch.cuda.empty_cache()
+        
     return np.vstack(embeddings).astype('float32')
 
 
