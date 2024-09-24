@@ -10,7 +10,7 @@ from sentence_transformers import SentenceTransformer
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 # Import the DatabaseManager and configure_logging from db_service
-from db_service import DatabaseManager, configure_logging
+from .db_service import DatabaseManager, configure_logging
 
 # Ensure logging is configured
 configure_logging()

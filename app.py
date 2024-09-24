@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-from db_service import DatabaseManager, configure_logging  # Adjusted the import to match the module
-from rag_system import RAGSystem  # Import the RAGSystem class
+from services.db_service import DatabaseManager, configure_logging
+from services.rag_service import RAGSystem  # Import the RAGSystem class
 import logging
 import traceback
 
@@ -13,6 +13,7 @@ app = Flask(__name__)
 # Initialize the RAGSystem
 try:
     rag_system = RAGSystem()
+
     logger.info("RAGSystem initialized successfully.", extra={'session_id': 'system'})
 except Exception as e:
     error_message = str(e)
