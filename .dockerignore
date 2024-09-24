@@ -1,0 +1,10 @@
+# Folders to ignore
+research_ai_env
+logs
+.vscode
+__pycache__
+services/__pycache__
+
+# Files to ignore
+.gitignore
+README.md
