@@ -1,12 +1,18 @@
+# app.py
+
+import gevent.monkey
+gevent.monkey.patch_all()  # Monkey-patch as early as possible
+
+# Now import other modules
 from flask import Flask
 from flask_socketio import SocketIO, emit
 from services.db_service import DatabaseManager, configure_logging
 from services.rag_service import RAGSystem  # Import the RAGSystem class
 import logging
 import traceback
-import gevent  # Import Gevent
-import gevent.monkey  # Gevent monkey-patching
-gevent.monkey.patch_all()  # Monkey patch to make standard libraries cooperative with Gevent
+
+# Rest of your application code...
+
 
 # Ensure logging is configured
 configure_logging()
