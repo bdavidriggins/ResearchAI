@@ -195,6 +195,7 @@ class RAGSystem:
             str: Generated answer.
         """
         try:
+            
             full_prompt = f"Context:\n{context}\n\nQuestion:\n{prompt}\n\nAnswer:"
             payload = {
                 "model": self.ollama_model,
