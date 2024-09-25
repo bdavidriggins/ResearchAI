@@ -1,9 +1,9 @@
-Flask>=3.0.3
+Flask>=2.3.2
+Flask-SocketIO>=5.3.4
+eventlet>=0.33.0
 requests>=2.31.0
 tqdm>=4.65.0
 sentence-transformers>=2.7.0
 faiss-cpu>=1.7.4
 numpy>=1.26.0
-Flask-SocketIO>=5.3.4
-gevent>=22.10.2
-gevent-websocket>=0.10.1
+websocket-client>=1.6.0
