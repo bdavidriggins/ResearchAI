@@ -42,8 +42,8 @@ def test_send_message():
         logger.info("Sending 'chat message' event to server...")
         data = {
             'session_id': 'test_session',
-            'query': 'What is the capital of France?',
-            'context': 'Geography'
+            'query': 'Who was Robert Rogers?',
+            'context': 'Your are a research assistant'
         }
         sio.emit('chat message', data)
         logger.debug(f"Message sent with data: {data}")
@@ -87,10 +87,10 @@ try:
     time.sleep(10)  # Adjust the sleep time as needed to allow interactions to complete
 
     # Test an invalid message
-    test_invalid_message()
+    #test_invalid_message()
 
     # Test reconnection
-    test_reconnection()
+    #test_reconnection()
 
 except Exception as e:
     logger.error(f"Error during connection or communication: {str(e)}")

@@ -1,3 +1,5 @@
+# /services/rag_system.py
+
 import os
 import json
 import logging
@@ -333,16 +335,6 @@ class RAGSystem:
             yield "An error occurred while processing your request."
 
     def generate_stream(self, prompt: str, context: str) -> Generator[str, None, None]:
-        """
-        Generate a response using the Ollama API with streaming.
-
-        Args:
-            prompt (str): The input prompt or question.
-            context (str): The context retrieved from documents.
-
-        Yields:
-            Generator[str, None, None]: Streamed response chunks.
-        """
         try:
             full_prompt = f"Context:\n{context}\n\nQuestion:\n{prompt}\n\nAnswer:"
             payload = {
@@ -352,12 +344,19 @@ class RAGSystem:
                 "temperature": 0.7,
                 "stream": True
             }
-            with requests.post(self.ollama_api_url, json=payload, stream=True) as response:
+            logger.info("Sending request to Ollama API for streaming generation.", extra={'session_id': self.session_id})
+            with requests.post(self.ollama_api_url, json=payload, stream=True, timeout=60) as response:
                 response.raise_for_status()
+                logger.info("Received response from Ollama API.", extra={'session_id': self.session_id})
                 for line in response.iter_lines():
                     if line:
                         decoded_line = line.decode('utf-8')
+                        logger.debug(f"Received chunk from Ollama API: {decoded_line}", extra={'session_id': self.session_id})
                         yield decoded_line
+            logger.info("Completed streaming from Ollama API.", extra={'session_id': self.session_id})
+        except requests.exceptions.Timeout:
+            logger.error("Ollama API request timed out.", extra={'session_id': self.session_id})
+            yield "The request timed out while generating the response."
         except requests.exceptions.RequestException as e:
             error_message = str(e)
             stack_trace = traceback.format_exc()

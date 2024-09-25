@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 # Initialize Flask app and SocketIO
 logger.debug("Initializing Flask app and SocketIO...")
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')  # Use Eventlet for async mode
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet', ping_timeout=120, ping_interval=25)
 logger.debug("Flask app and SocketIO initialized.")
 
 # Initialize the RAGSystem
@@ -100,6 +100,7 @@ def handle_message(data):
         # After streaming all chunks, send a completion message
         logger.info("Finished streaming response chunks.", extra={'session_id': session_id})
         emit('response_complete')
+        logger.info("Emitted 'response_complete' to client.", extra={'session_id': session_id})
 
         # Save the chat, log, and LLM response to the database
         logger.info("Saving chat and response data to database...", extra={'session_id': session_id})
@@ -165,6 +166,7 @@ def handle_message(data):
         logger.error(f"Unexpected error in handle_message: {error_message}",
                      extra={'session_id': session_id, 'error_stack': stack_trace})
         emit('error', {"error": "An internal server error occurred."})
+
 
 
 if __name__ == '__main__':
