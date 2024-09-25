@@ -90,7 +90,7 @@ try:
     #test_invalid_message()
 
     # Test reconnection
-    #test_reconnection()
+    test_reconnection()
 
 except Exception as e:
     logger.error(f"Error during connection or communication: {str(e)}")

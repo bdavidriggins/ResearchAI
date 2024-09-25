@@ -345,7 +345,7 @@ class RAGSystem:
                 "stream": True
             }
             logger.info("Sending request to Ollama API for streaming generation.", extra={'session_id': self.session_id})
-            with requests.post(self.ollama_api_url, json=payload, stream=True, timeout=60) as response:
+            with requests.post(self.ollama_api_url, json=payload, stream=True, timeout=120) as response:
                 response.raise_for_status()
                 logger.info("Received response from Ollama API.", extra={'session_id': self.session_id})
                 for line in response.iter_lines():
